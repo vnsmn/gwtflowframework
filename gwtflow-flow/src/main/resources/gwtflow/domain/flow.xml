@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow4.xsd"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow.xsd"
          xmlns:xi="http://www.w3.org/2001/XInclude">
 
-    <xi:include href="system-flow2.xml"/>
+    <xi:include href="system-flow.xml"/>
 
     <graph id="gPoints" type="point">
         <node id="StartPoint">
