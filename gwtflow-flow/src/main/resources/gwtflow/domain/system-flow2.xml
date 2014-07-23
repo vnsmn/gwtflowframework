@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow2.xsd">
+
+    <key id="dCmd" for="node" attr.name="command" attr.type="string">
+        <default></default>
+    </key>
+    <key id="dProp" for="node" attr.name="property" attr.type="string">
+        <default></default>
+    </key>
+    <key id="dView" for="node" attr.name="view" attr.type="boolean">
+        <default></default>
+    </key>
+</graphml>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       	http://www.springframework.org/schema/beans
+       	http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/data/neo4j
+		http://www.springframework.org/schema/data/neo4j/spring-neo4j.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:spring-configured/>
+    <context:annotation-config/>
+    <context:component-scan base-package="ua.cetelem.gwt.server.flow" />
+
+    <bean id="graphDatabaseService" class="org.neo4j.kernel.EmbeddedGraphDatabase">
+        <constructor-arg value="/tmp/data/graph.db"/>
+    </bean>
+
+    <bean id="neo4jTemplate" class="org.springframework.data.neo4j.support.Neo4jTemplate">
+        <constructor-arg>
+            <ref bean="graphDatabaseService"/>
+        </constructor-arg>
+    </bean>
+
+    <!--
+    <neo4j:config storeDirectory="/tmp/data/graph.db"
+                  graphDatabaseService="graphDatabaseService"
+                  base-package="ua.cetelem.gwt.server.flow.neo4j.domain"/>
+    -->
+    <neo4j:config graphDatabaseService="graphDatabaseService"
+                  base-package="ua.cetelem.gwt.server.flow.neo4j.domain"/>
+    <neo4j:repositories base-package="ua.cetelem.gwt.server.flow.neo4j.repository"/>
+
+    <tx:annotation-driven />
+
+    <tx:annotation-driven mode="proxy" />
+
+    <bean id="metaModelService" class="ua.cetelem.gwt.server.flow.service.MetaModelService">
+        <property name="flowResource" value="classpath:gwtflow/domain/flow5.xml"/>
+    </bean>
+
+    <bean id="delegateViewFlowDao" class="ua.cetelem.gwt.server.flow.neo4j.dao.Neo4jViewFlowDaoImpl"/>
+    <bean id="delegatePointFlowDao" class="ua.cetelem.gwt.server.flow.neo4j.dao.Neo4jPointFlowDaoImpl"/>
+    <bean id="delegateCmdFlowDao" class="ua.cetelem.gwt.server.flow.neo4j.dao.Neo4jCmdFlowDaoImpl"/>
+    <bean id="delegateInfDbFlowDao" class="ua.cetelem.gwt.server.flow.neo4j.dao.Neo4jInfDbFlowDaoImpl"/>
+
+    <bean id="finderIntroductionAdvisor" class="ua.cetelem.gwt.server.flow.dao.impl.FinderIntroductionAdvisor"/>
+
+    <bean id="abstractFlowDaoTarget"
+          class="ua.cetelem.gwt.server.flow.dao.impl.FlowDaoImpl" abstract="true">
+    </bean>
+
+    <bean id="abstractFlowDao"
+          class="org.springframework.aop.framework.ProxyFactoryBean" abstract="true">
+        <property name="interceptorNames">
+            <list>
+                <value>finderIntroductionAdvisor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="viewFlowDao" parent="abstractFlowDao">
+        <property name="proxyInterfaces">
+            <value>ua.cetelem.gwt.server.flow.dao.ViewFlowDao</value>
+        </property>
+        <property name="target">
+            <bean parent="abstractFlowDaoTarget">
+                <constructor-arg index="0" type="Class" value="ua.cetelem.gwt.server.flow.domain.View"></constructor-arg>
+                <constructor-arg index="1" ref="delegateViewFlowDao"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="pointFlowDao" parent="abstractFlowDao">
+        <property name="proxyInterfaces">
+            <value>ua.cetelem.gwt.server.flow.dao.PointFlowDao</value>
+        </property>
+        <property name="target">
+            <bean parent="abstractFlowDaoTarget">
+                <constructor-arg index="0" type="Class" value="ua.cetelem.gwt.server.flow.domain.Point"></constructor-arg>
+                <constructor-arg index="1" ref="delegatePointFlowDao"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="cmdFlowDao" parent="abstractFlowDao">
+        <property name="proxyInterfaces">
+            <value>ua.cetelem.gwt.server.flow.dao.CmdFlowDao</value>
+        </property>
+        <property name="target">
+            <bean parent="abstractFlowDaoTarget">
+                <constructor-arg index="0" type="Class" value="ua.cetelem.gwt.server.flow.domain.Cmd"></constructor-arg>
+                <constructor-arg index="1" ref="delegateCmdFlowDao"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="infDbFlowDao" parent="abstractFlowDao">
+        <property name="proxyInterfaces">
+            <value>ua.cetelem.gwt.server.flow.dao.InfDbFlowDao</value>
+        </property>
+        <property name="target">
+            <bean parent="abstractFlowDaoTarget">
+                <constructor-arg index="0" type="Class" value="ua.cetelem.gwt.server.flow.domain.InfDb"></constructor-arg>
+                <constructor-arg index="1" ref="delegateInfDbFlowDao"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

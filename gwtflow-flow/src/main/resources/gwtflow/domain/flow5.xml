@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow4.xsd"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <xi:include href="system-flow2.xml"/>
+
+    <graph id="gPoints" type="point">
+        <node id="StartPoint">
+            <data key="PNTViewName">/gViews/nStart2</data>
+            <graph>
+                <hyperedge id="Next">
+                    <endpoint id="e1" node="FinishPoint"/>
+                    <endpoint id="e2" node="StartPoint"/>
+                </hyperedge>
+            </graph>
+        </node>
+
+        <node id="FinishPoint">
+            <data key="PNTViewName">/gViews/nStart2</data>
+            <graph>
+                <hyperedge id="Back">
+                    <endpoint id="e1" node="/gPoints/StartPoint"/>
+                    <endpoint id="e2" node="FinishPoint"/>
+                </hyperedge>
+            </graph>
+        </node>
+    </graph>
+
+    <graph id="gViews" type="view">
+        <node id="nText">
+            <data key="UIControlType">text</data>
+            <data key="UICssClass">css1</data>
+        </node>
+
+        <node id="nText2">
+            <data key="UIControlType">text</data>
+            <data key="UICssClass">css1</data>
+        </node>
+
+        <node id="nStart">
+            <data key="UIControlType">text</data>
+            <data key="UICssClass">css1</data>
+            <graph>
+                <hyperedge id="h1">
+                    <endpoint id="e1" node="/gViews/nText"/>
+                    <endpoint id="e2" node="/gViews/nText2" index="1"/>
+                </hyperedge>
+            </graph>
+        </node>
+
+        <node id="nStart2" super="/gViews/nStart">
+            <data key="UICssClass">css2</data>
+            <port name="port1">port_test1</port>
+            <port name="port2">port_test2</port>
+            <graph>
+                <node id="nText">
+                    <data key="UICssClass">css2</data>
+                </node>
+                <node id="nText3">
+                    <data key="UIControlType">text</data>
+                    <port name="port1">port_test1</port>
+                    <port name="port2">port_test2</port>
+                    <graph>
+                        <hyperedge id="h1">
+                            <endpoint id="e1" node="/gViews/nText2" port="port1"/>
+                            <endpoint id="e2" node="/gViews/nText" port="port2" index="1"/>
+                        </hyperedge>
+                    </graph>
+                </node>
+                <hyperedge id="h1">
+                    <endpoint id="e1" node="/gViews/nText"/>
+                    <endpoint id="e2" node="/gViews/nStart2/nText" index="1"/>
+                    <endpoint id="e3" node="nText3" index="2"/>
+                </hyperedge>
+            </graph>
+        </node>
+    </graph>
+</graphml>

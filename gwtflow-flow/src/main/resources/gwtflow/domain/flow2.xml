@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<!DOCTYPE graphml [
+        <!ENTITY systemflow SYSTEM "system-flow.xml">
+        ]>
+-->
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow.xsd"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <xi:include href="system-flow.xml"/>
+
+    <graph id="gPoints" edgedefault="directed" type="point">
+        <node id="nStartPoint"/>
+        <node id="nTariffPoint"/>
+        <node id="nCreditPoint"/>
+        <node id="nInfoPoint">
+            <port name="credit"/>
+            <port name="tariff"/>
+        </node>
+        <node id="nFinishPoint"/>
+        <edge id="eStartTarif" source="nStartPoint" target="nTariffPoint"/>
+        <edge id="eTarifStart" source="nTariffPoint" target="nStartPoint"/>
+        <edge id="eTarifFinish" source="nTariffPoint" target="nFinishPoint"/>
+        <edge id="eStartCredit" source="nStartPoint" target="nCreditPoint"/>
+        <edge id="eCreditFinish" source="nCreditPoint" target="nFinishPoint"/>
+        <edge id="eCreditFinishInfo" source="nFinishPoint" target="nInfoPoint" targetport="credit"/>
+        <edge id="eTariffFinishInfo" source="nFinishPoint" target="nInfoPoint" targetport="tariff"/>
+        <edge id="eInfoFinish" source="nInfoPoint" target="nFinishPoint"/>
+    </graph>
+    <graph id="gViews" edgedefault="undirected" type="view">
+        <node id="nUserNameView" type="view">
+            <data key="dUIControlType">TextEdit</data>
+            <data key="dUICssClass">TextEdit</data>
+            <data key="dUIReadonly">false</data>
+        </node>
+        <node id="nTariffNameView" type="view">
+            <data key="dUIControlType">TextEdit</data>
+            <data key="dUICssClass">TextEdit</data>
+            <data key="dUIReadonly">false</data>
+        </node>
+        <node id="nStatusNameView" type="view">
+            <data key="dUIControlType">Label</data>
+            <data key="dUICssClass">Label</data>
+        </node>
+        <node id="nUserView">
+            <data key="dUIControlType">Panel</data>
+            <data key="dUICssClass">Panel</data>
+            <graph type="point">
+                <node id="nUserNameView"/>
+            </graph>
+        </node>
+        <node id="nTariffView" super="nUserView">
+            <graph type="view">
+                <node id="nUserNameView">
+                    <data key="dUIReadonly">true</data>
+                </node>
+                <node id="nTariffNameView"/>
+                <edge source="nUserNameView" target="nTariffNameView"/>
+            </graph>
+        </node>
+        <node id="nFinishView" super="nTariffView">
+            <graph>
+                <node id="nTariffNameView">
+                    <data key="dUIReadonly">true</data>
+                </node>
+                <node id="nStatusNameView"/>
+                <edge source="nStatusNameView" target="nTariffNameView"/>
+                <edge source="nTariffNameView" target="nUserNameView"/>
+            </graph>
+        </node>
+    </graph>
+    <graph id="gPointLinks" edgedefault="undirected" type="link">
+        <node id="nStartPoint">
+            <graph id="tariff" type="port">
+                <node id="nCommitAction">
+                    <data key="button">submit</data>
+                </node>
+                <node id="nBackAction">
+                    <data key="button">back</data>
+                </node>
+                <edge source="nCommitAction" target="nBackAction"/>
+                <data key="view">
+                    <prop value="nUserView" type="view"/>
+                    <prop ref="nUserView" type="prop">
+                        <prop ref="nUserNameView" type="prop">
+                            <prop ref="dUICssClass" type="prop" value="TestEditExt"/>
+                        </prop>
+                    </prop>
+                </data>
+            </graph>
+        </node>
+    </graph>
+</graphml>

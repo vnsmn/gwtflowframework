@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow3.xsd"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <xi:include href="system-flow2.xml"/>
+
+    <graph id="gPoints" type="point">
+        <node id="nStartPoint">
+            <data key="dPNTViewName">/gViews/nStart</data>
+            <graph id="gCmds">
+                <edge id="e1" source="/gCmds/nStart" target="/gCmds/nFinish"/>
+            </graph>
+        </node>
+        <edge id="eStartPoint1" source="nStartPoint" target="nFinalPoint"/>
+
+        <node id="nFinishPoint">
+            <data key="dPNTViewName">/gViews/nStart2</data>
+            <graph>
+                <edge id="e1" source="/gCmds/nBackCmd" target=""/>
+            </graph>
+        </node>
+        <edge id="eFinishPoint1" source="nFinishPoint" target="nStartPoint"/>
+    </graph>
+
+    <graph id="gCmds" type="cmd">
+        <node id="nStart">
+            <data key="dCMDName">start</data>
+            <data key="dCMDLabel">start</data>
+        </node>
+        <node id="nFinish">
+            <data key="dCMDName">finish</data>
+            <data key="dCMDLabel">finish</data>
+        </node>
+    </graph>
+
+    <graph id="gViews" type="view">
+        <node id="nText">
+            <data key="dUIControlType">text</data>
+            <data key="dUICssClass">css1</data>
+        </node>
+
+        <node id="nText2">
+            <data key="dUIControlType">text</data>
+            <data key="dUICssClass">css1</data>
+        </node>
+
+        <node id="nStart">
+            <data key="dUIControlType">text</data>
+            <data key="dUICssClass">css1</data>
+            <graph>
+                <edge id="e1" source="/gViews/nText" target="/gViews/nText2"/>
+            </graph>
+        </node>
+
+        <node id="nStart2" super="/gViews/nStart">
+            <data key="dUICssClass">css2</data>
+            <port name="port1">port_test1</port>
+            <port name="port2">port_test2</port>
+            <graph>
+                <node id="nText">
+                    <data key="dUICssClass">css2</data>
+                </node>
+                <node id="nText3">
+                    <data key="dUIControlType">text</data>
+                    <graph>
+                        <edge id="e1" source="/gViews/nText2" target="/gViews/nText"/>
+                    </graph>
+                </node>
+                <edge id="e1" source="/gViews/nText" sourceport="port1" target="/gViews/nStart2/nText" targetport="port1"/>
+                <edge id="e5" source="nText" sourceport="port2" target="nText3" targetport="port2"/>
+            </graph>
+        </node>
+    </graph>
+</graphml>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ../schema/flow.xsd">
+
+    <key id="dActionButton" for="edge" attr.name="ActionButton" attr.type="string">
+        <default>commit</default>
+    </key>
+    <key id="dUIControlType" for="node" attr.name="UIControlType" attr.type="string">
+        <default>panel</default>
+    </key>
+    <key id="dUIRendered" for="node" attr.name="UIRendered" attr.type="boolean">
+        <default>true</default>
+    </key>
+    <key id="dUICssClass" for="node" attr.name="UICssClass" attr.type="string">
+        <default></default>
+    </key>
+    <key id="dUIReadonly" for="node" attr.name="UIReadonly" attr.type="boolean">
+        <default>true</default>
+    </key>
+    <key id="dUIHidden" for="node" attr.name="UIHidden" attr.type="boolean">
+        <default>false</default>
+    </key>
+</graphml>

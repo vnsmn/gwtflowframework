@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        targetNamespace="http://graphml.graphdrawing.org/xmlns"
+        xmlns="http://graphml.graphdrawing.org/xmlns"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+    <xs:import namespace="http://www.w3.org/2000/svg"
+               schemaLocation="http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd"/>
+
+    <xs:redefine schemaLocation="http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
+        <xs:attributeGroup name="node.extra.attrib">
+            <xs:attributeGroup ref="node.extra.attrib"/>
+            <xs:attribute name="type" type="nodeType" use="optional"/>
+            <xs:attribute name="super" type="xs:NMTOKEN" use="optional"/>
+        </xs:attributeGroup>
+        <xs:attributeGroup name="graph.extra.attrib">
+            <xs:attributeGroup ref="graph.extra.attrib"/>
+            <xs:attribute name="type" type="graph.type.type" use="optional" default="nested"/>
+        </xs:attributeGroup>
+        <xs:attributeGroup name="key.extra.attrib">
+            <xs:attributeGroup ref="key.extra.attrib"/>
+            <xs:attribute name="id" type="key.id.type"/>
+            <xs:attribute name="attr.name" type="key.attr.name.type"/>
+        </xs:attributeGroup>
+        <xs:complexType name="graph.type" final="#all">
+            <xs:complexContent>
+                <xs:extension base="graph.type">
+                    <xs:attribute name="edgedefault" type="graph.edgedefault.type" use="optional" default="directed"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="data.type">
+            <xs:complexContent>
+                <xs:extension base="data.type">
+                    <xs:sequence>
+                        <xs:element ref="prop" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+
+    <xs:simpleType name="nodeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="point"/>
+            <xs:enumeration value="action"/>
+            <xs:enumeration value="view"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="graph.type.type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="point"/>
+            <xs:enumeration value="link"/>
+            <xs:enumeration value="view"/>
+            <xs:enumeration value="port"/>
+            <xs:enumeration value="nested"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="key.id.type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="dActionButton"/>
+            <xs:enumeration value="dUIControlType"/>
+            <xs:enumeration value="dUIRendered"/>
+            <xs:enumeration value="dUIReadonly"/>
+            <xs:enumeration value="dUIHidden"/>
+            <xs:enumeration value="dUICssClass"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="key.attr.name.type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ActionButton"/>
+            <xs:enumeration value="UIControlType"/>
+            <xs:enumeration value="UIRendered"/>
+            <xs:enumeration value="UIReadonly"/>
+            <xs:enumeration value="UIHidden"/>
+            <xs:enumeration value="UICssClass"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="prop" type="prop.type">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="prop.type" final="#all">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="prop" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="ref" type="xs:NMTOKEN" use="optional"/>
+        <xs:attribute name="type" type="prop.type.type" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:simpleType name="prop.type.type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="view"/>
+            <xs:enumeration value="prop"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
