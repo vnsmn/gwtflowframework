@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>gwtflow-flow</module>
         <module>gwtflow-gui</module>
     </modules>
 

@@ -1,5 +1,6 @@
 package ua.cetelem.gwt.server.flow.xml;
 
+import gwtflow.flow.server.xml.ImportHelper;
 import org.junit.Test;
 
 public class ImportHelperTest {

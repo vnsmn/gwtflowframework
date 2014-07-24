@@ -1,26 +1,15 @@
 package ua.cetelem.gwt.server.flow.xml;
 
-import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.cetelem.gwt.server.flow.dao.ViewFlowDao;
-import ua.cetelem.gwt.server.flow.domain.View;
-import ua.cetelem.gwt.server.flow.neo4j.domain.View2ViewEntity;
-import ua.cetelem.gwt.server.flow.neo4j.domain.ViewEntity;
-import ua.cetelem.gwt.server.flow.neo4j.repository.ViewRepository;
-import ua.cetelem.gwt.server.flow.service.MetaModelService;
+import gwtflow.flow.server.service.MetaModelService;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author mh
