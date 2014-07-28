@@ -43,10 +43,6 @@ public class ParserTest {
 
                 ParseTreeWalker.DEFAULT.walk(new SQLiteBaseListener(){
 
-//                    public void enterEveryRule(@org.antlr.v4.runtime.misc.NotNull org.antlr.v4.runtime.ParserRuleContext parserRuleContext) {
-//
-//                    }
-
                     public void exitEveryRule(@org.antlr.v4.runtime.misc.NotNull org.antlr.v4.runtime.ParserRuleContext parserRuleContext) {
                         super.exitEveryRule(parserRuleContext);
                         System.out.println(parserRuleContext.toInfoString(parser));
