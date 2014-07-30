@@ -1,17 +1,26 @@
-package gwtflow.datasource.sqliteparser;
+package gwtflow.datasource;
 
+import gwtflow.datasource.sqliteparser.SQLiteBaseListener;
+import gwtflow.datasource.sqliteparser.SQLiteBaseVisitor;
+import gwtflow.datasource.sqliteparser.SQLiteLexer;
+import gwtflow.datasource.sqliteparser.SQLiteParser;
 import gwtflow.datasource.sqliteparser.expression.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-public class ParserTest {
+public class QueryParse {
 
     // A counter that keeps track of the total amount of statements
     // parsed in the test below.
@@ -43,7 +52,7 @@ public class ParserTest {
 
                 ParseTreeWalker.DEFAULT.walk(new SQLiteBaseListener(){
 
-                    public void exitEveryRule(@org.antlr.v4.runtime.misc.NotNull org.antlr.v4.runtime.ParserRuleContext parserRuleContext) {
+                    public void exitEveryRule(@NotNull ParserRuleContext parserRuleContext) {
                         super.exitEveryRule(parserRuleContext);
                         System.out.println(parserRuleContext.toInfoString(parser));
                     }

@@ -1,46 +1,34 @@
 package gwtflow.datasource.sqliteparser.expression;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.*;
 
-public class EQExpression extends BaseExpression<Boolean> {
-    private BaseExpression left;
-    private BaseExpression right;
-
-    public EQExpression(BaseExpression left, BaseExpression right) {
-        this.left = left;
-        this.right = right;
-    }
-
-    public BaseExpression getLeft() {
-        return left;
-    }
-
-    public BaseExpression getRight() {
-        return right;
-    }
-
-    public Boolean getResult() {
-        if (left == null || left.getResult() == null) {
-            return false;
-        }
-        if (right == null || right.getResult() == null) {
-            return false;
-        }
-        return left.getResult().equals(right.getResult());
-    }
-
-    public Object getResult(Map<String, List<Map<String, Object>>> tabs) {
+public class MathHandler {
+    public Object getResult(Map<String, List<Map<String, Object>>> tabs,
+                            BaseExpression left, BaseExpression right) {
         Iterator<Map<String, Object>> it1 = null;
         Iterator<Map<String, Object>> it2 = null;
         IdentifierExpression id1 = null;
         IdentifierExpression id2 = null;
-        if (getLeft() instanceof IdentifierExpression) {
-            id1 = (IdentifierExpression) getLeft();
+        LiteralExpression l1 = null;
+        LiteralExpression l2 = null;
+
+        if (left instanceof IdentifierExpression) {
+            id1 = (IdentifierExpression) left;
             it1 = tabs.get(id1.getTableName()).iterator();
+        } else if (left instanceof LiteralExpression) {
+            l1 = (LiteralExpression) left;
+        } else {
+            throw new IllegalArgumentException();
         }
-        if (getRight() instanceof IdentifierExpression) {
-            id2 = (IdentifierExpression) getRight();
+
+        if (right instanceof IdentifierExpression) {
+            id2 = (IdentifierExpression) right;
             it2 = tabs.get(id2.getTableName()).iterator();
+        } else if (left instanceof LiteralExpression) {
+            l2 = (LiteralExpression) right;
+        } else {
+            throw new IllegalArgumentException();
         }
 
         Map<String, List<Map<String, Object>>> calcTabs = new HashMap<String, List<Map<String, Object>>>();
