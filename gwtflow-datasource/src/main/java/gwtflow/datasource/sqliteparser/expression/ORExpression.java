@@ -1,6 +1,11 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-public class ORExpression extends BaseExpression<Boolean> {
+import gwtflow.datasource.Schema;
+
+import java.util.List;
+import java.util.Map;
+
+public class ORExpression extends BaseExpression {
     private BaseExpression left;
     private BaseExpression right;
 
@@ -17,13 +22,8 @@ public class ORExpression extends BaseExpression<Boolean> {
         return right;
     }
 
-    public Boolean getResult() {
-        if (left == null || left.getResult() == null) {
-            return false;
-        }
-        if (right == null || right.getResult() == null) {
-            return false;
-        }
-        return ((Boolean) left.getResult()) || ((Boolean) right.getResult());
+    @Override
+    public Object getResult(Schema tabs) {
+        return super.getResult(tabs);
     }
 }

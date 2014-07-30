@@ -1,5 +1,10 @@
 package gwtflow.datasource.sqliteparser.expression;
 
+import gwtflow.datasource.Schema;
+
+import java.util.List;
+import java.util.Map;
+
 public class OrderExpression extends IdentifierExpression {
     public enum DIRECT {ASC, DESC};
     private DIRECT direct = DIRECT.ASC;
@@ -20,7 +25,8 @@ public class OrderExpression extends IdentifierExpression {
         this.direct = direct;
     }
 
-    public Object getResult() {
-        return "10";
+    @Override
+    public Object getResult(Schema tabs) {
+        return null;
     }
 }

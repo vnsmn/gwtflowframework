@@ -21,34 +21,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class QueryParse {
+    private List<ParserRuleContext> parserRuleContextStack = new ArrayList<ParserRuleContext>();
+    private LinkedList<TerminalNode> terminalNodeStack = new LinkedList<TerminalNode>();
+    private LinkedList<BaseExpression> whereExpressionStack = new LinkedList<BaseExpression>();
+    private LinkedList<BaseExpression> orderExpressionStack = new LinkedList<BaseExpression>();
+    private LinkedList<BaseExpression> limitExpressionStack = new LinkedList<BaseExpression>();
+    private LinkedList<BaseExpression> offsetExpressionStack = new LinkedList<BaseExpression>();
 
-    // A counter that keeps track of the total amount of statements
-    // parsed in the test below.
-    private int totalStatements = 0;
+    public void parse() {
 
-    @Test
-    public void test() {
 
             try {
                 //String sql = "select sel1.col1 as col2 from tab1 join tab2 on t1.c1 = t2.c2 where t11.c11 = 9 and t11.c22 = :test";
-                //String sql = "select sel1 from tab1 where t11.c11 == 9";
+                String sql = "select sel1 from tab1 where t11.c11 == 9";
                 //String sql = "select sel1, sel2 from tab1 where ((tbl.col1 == 9 or tbl.col1 == 10) and tbl.col2 == 10) order by t.c desc, c2 limit t.c offset 10";
                 //String sql = "select sel1 from tab1 where tbl.col1 == 9 order by t.c desc, c2 limit 10 offset 20";
-                String sql = "select sel1 as s from tab1 as t limit t.c offset 10";
+                //String sql = "select sel1 as s from tab1 as t limit t.c offset 10";
                 ByteArrayInputStream bis = new ByteArrayInputStream(sql.getBytes());
                 SQLiteLexer lexer = new SQLiteLexer(new ANTLRInputStream(bis));
                 final SQLiteParser parser = new SQLiteParser(new CommonTokenStream(lexer));
                 ParseTree tree = parser.parse();
-
-                tree.accept(new SQLiteBaseVisitor<Object>() {
-                    public Object visit(@NotNull ParseTree tree) {
-                        return super.visit(tree);
-                    }
-
-                    public Object visitTerminal(@NotNull TerminalNode node) {
-                        return super.visitTerminal(node);
-                    }
-                });
 
                 ParseTreeWalker.DEFAULT.walk(new SQLiteBaseListener(){
 
@@ -57,95 +49,74 @@ public class QueryParse {
                         System.out.println(parserRuleContext.toInfoString(parser));
                     }
 
-                    @Override
-                    public void enterSql_stmt(@NotNull SQLiteParser.Sql_stmtContext ctx) {
-                        totalStatements++;
-                    }
-
-                    @Override
-                    public void exitSql_stmt(@NotNull SQLiteParser.Sql_stmtContext ctx) {
-                        super.exitSql_stmt(ctx);
-                    }
-
-                    @Override
-                    public void enterSelect_core(@NotNull SQLiteParser.Select_coreContext ctx) {
-                        super.enterSelect_core(ctx);
-                    }
-
-                    @Override
-                    public void enterColumn_name(@NotNull SQLiteParser.Column_nameContext ctx) {
-                        super.enterColumn_name(ctx);
-                    }
-
-                    @Override
-                    public void enterColumn_alias(@NotNull SQLiteParser.Column_aliasContext ctx) {
-                        super.enterColumn_alias(ctx);
-                    }
+//                    @Override
+//                    public void exitSql_stmt(@NotNull SQLiteParser.Sql_stmtContext ctx) {
+//                        super.exitSql_stmt(ctx);
+//                    }
+//
+//                    @Override
+//                    public void enterSelect_core(@NotNull SQLiteParser.Select_coreContext ctx) {
+//                        super.enterSelect_core(ctx);
+//                    }
+//
+//                    @Override
+//                    public void enterColumn_name(@NotNull SQLiteParser.Column_nameContext ctx) {
+//                        super.enterColumn_name(ctx);
+//                    }
+//
+//                    @Override
+//                    public void enterColumn_alias(@NotNull SQLiteParser.Column_aliasContext ctx) {
+//                        super.enterColumn_alias(ctx);
+//                    }
 
 
-                    @Override
-                    public void exitColumn_alias(@NotNull SQLiteParser.Column_aliasContext ctx) {
-                        super.exitColumn_alias(ctx);
-                    }
-
-                    @Override public void exitTable_alias(@NotNull SQLiteParser.Table_aliasContext ctx) {
-                        super.exitTable_alias(ctx);
-                    }
-
-                    @Override
-                    public void exitTable_or_subquery(@NotNull SQLiteParser.Table_or_subqueryContext ctx) {
-                        super.exitTable_or_subquery(ctx);
-                    }
-
-                    @Override
-                    public void enterResult_column(@NotNull SQLiteParser.Result_columnContext ctx) {
-                        super.enterResult_column(ctx);
-                    }
-
-                    @Override
-                    public void exitResult_column(@NotNull SQLiteParser.Result_columnContext ctx) {
-                        super.exitResult_column(ctx);
-                    }
+//                    @Override
+//                    public void exitColumn_alias(@NotNull SQLiteParser.Column_aliasContext ctx) {
+//                        super.exitColumn_alias(ctx);
+//                    }
+//
+//                    @Override public void exitTable_alias(@NotNull SQLiteParser.Table_aliasContext ctx) {
+//                        super.exitTable_alias(ctx);
+//                    }
+//
+//                    @Override
+//                    public void exitTable_or_subquery(@NotNull SQLiteParser.Table_or_subqueryContext ctx) {
+//                        super.exitTable_or_subquery(ctx);
+//                    }
+//
+//                    @Override
+//                    public void enterResult_column(@NotNull SQLiteParser.Result_columnContext ctx) {
+//                        super.enterResult_column(ctx);
+//                    }
+//
+//                    @Override
+//                    public void exitResult_column(@NotNull SQLiteParser.Result_columnContext ctx) {
+//                        super.exitResult_column(ctx);
+//                    }
 
                     @Override
                     public void enterExpr(@NotNull SQLiteParser.ExprContext ctx) {
                         super.enterExpr(ctx);
                     }
 
-                    private List<ParserRuleContext> parserRuleContextStack = new ArrayList<ParserRuleContext>();
-                    private LinkedList<TerminalNode> terminalNodeStack = new LinkedList<TerminalNode>();
-                    private LinkedList<BaseExpression> whereExpressionStack = new LinkedList<BaseExpression>();
-                    private LinkedList<BaseExpression> orderExpressionStack = new LinkedList<BaseExpression>();
-                    private LinkedList<BaseExpression> limitExpressionStack = new LinkedList<BaseExpression>();
-                    private LinkedList<BaseExpression> offsetExpressionStack = new LinkedList<BaseExpression>();
-
-                    private boolean isPar(SQLiteParser.ExprContext ctx) {
-                        return ctx.expr() != null && !ctx.expr().isEmpty()
-                                && ctx.start != null && ctx.start.getType() == SQLiteParser.OPEN_PAR
-                                && ctx.stop != null && ctx.stop.getType() == SQLiteParser.CLOSE_PAR;
-                    }
-
                     @Override
                     public void exitExpr(@NotNull SQLiteParser.ExprContext ctx) {
                         super.exitExpr(ctx);
                         if (findTerminalNode(SQLiteParser.K_WHERE) != null) {
-                            if (isPar(ctx)) {
+                            if (isEnclose(ctx)) {
                                 whereExpressionStack.offerLast(new EncloseExpression(whereExpressionStack.pollLast()));
                             } else if (!ctx.getTokens(SQLiteParser.EQ).isEmpty()) {
                                 BaseExpression right = whereExpressionStack.pollLast();
                                 BaseExpression left = whereExpressionStack.pollLast();
                                 whereExpressionStack.offerLast(new EQExpression(left, right));
-                                System.out.println(((EQExpression) whereExpressionStack.peekLast()).getResult());
                             } else if (ctx.K_AND() != null) {
                                 BaseExpression right = whereExpressionStack.pollLast();
                                 BaseExpression left = whereExpressionStack.pollLast();
                                 whereExpressionStack.offerLast(new ANDExpression(left, right));
-                                System.out.println(((ANDExpression) whereExpressionStack.peekLast()).getResult());
                             } else if (ctx.K_OR() != null) {
                                 BaseExpression right = whereExpressionStack.pollLast();
                                 BaseExpression left = whereExpressionStack.pollLast();
                                 whereExpressionStack.offerLast(new ORExpression(left, right));
-                                System.out.println(((ORExpression) whereExpressionStack.peekLast()).getResult());
                             } else if (ctx.column_name() != null && !ctx.column_name().isEmpty()) {
                                 IdentifierExpression expression = new IdentifierExpression(ctx.column_name().getText());
                                 if (ctx.table_name() != null && !ctx.table_name().isEmpty()) {
@@ -181,7 +152,6 @@ public class QueryParse {
                         parserRuleContextStack.add(ctx);
                     }
 
-
                     @Override
                     public void exitOrdering_term(@NotNull SQLiteParser.Ordering_termContext ctx) {
                         super.exitOrdering_term(ctx);
@@ -195,36 +165,11 @@ public class QueryParse {
                         }
                     }
 
-                    @Override
-                    public void exitFactored_select_stmt(@NotNull SQLiteParser.Factored_select_stmtContext ctx) {
-                        super.exitFactored_select_stmt(ctx);
-                    }
+//                    @Override
+//                    public void exitFactored_select_stmt(@NotNull SQLiteParser.Factored_select_stmtContext ctx) {
+//                        super.exitFactored_select_stmt(ctx);
+//                    }
 
-                    private TerminalNode findTerminalNode(int type) {
-                        Iterator<TerminalNode> it =  terminalNodeStack.descendingIterator();
-                        while (it.hasNext()) {
-                            TerminalNode node = it.next();
-                            if (node.getSymbol().getType() == type) {
-                                return node;
-                            }
-                        }
-                        return null;
-                    }
-                    private void removeTerminalNode(int startType, int endType) {
-
-                        Iterator<TerminalNode> it =  terminalNodeStack.descendingIterator();
-                        boolean canRemove = false;
-                        while (it.hasNext()) {
-                            TerminalNode node = it.next();
-                            if (node.getSymbol().getType() == endType) {
-                                canRemove = true;
-                            } else if (node.getSymbol().getType() == startType) {
-                                return;
-                            } else if (canRemove) {
-                                it.remove();
-                            }
-                        }
-                    }
                     public void visitTerminal(TerminalNode node) {
                         super.visitTerminal(node);
                         terminalNodeStack.add(node);
@@ -245,28 +190,60 @@ public class QueryParse {
                         }
                     }
 
-                    @Override public void enterTable_name(@NotNull SQLiteParser.Table_nameContext ctx) {
-                        super.enterTable_name(ctx);
+//                    @Override public void enterTable_name(@NotNull SQLiteParser.Table_nameContext ctx) {
+//                        super.enterTable_name(ctx);
+//                    }
+//
+//                    @Override
+//                    public void enterSelect_stmt(@NotNull SQLiteParser.Select_stmtContext ctx) {
+//                        super.enterSelect_stmt(ctx);
+//                    }
+//
+//                    @Override
+//                    public void exitSelect_stmt(@NotNull SQLiteParser.Select_stmtContext ctx) {
+//                        super.exitSelect_stmt(ctx);
+//                    }
+//
+//                    @Override
+//                    public void enterSelect_or_values(@NotNull SQLiteParser.Select_or_valuesContext ctx) {
+//                        super.enterSelect_or_values(ctx);
+//                    }
+//
+//                    @Override
+//                    public void exitSelect_core(@NotNull SQLiteParser.Select_coreContext ctx) {
+//                        super.exitSelect_core(ctx);
+//                    }
+
+                    private TerminalNode findTerminalNode(int type) {
+                        Iterator<TerminalNode> it =  terminalNodeStack.descendingIterator();
+                        while (it.hasNext()) {
+                            TerminalNode node = it.next();
+                            if (node.getSymbol().getType() == type) {
+                                return node;
+                            }
+                        }
+                        return null;
                     }
 
-                    @Override
-                    public void enterSelect_stmt(@NotNull SQLiteParser.Select_stmtContext ctx) {
-                        super.enterSelect_stmt(ctx);
+                    private void removeTerminalNode(int startType, int endType) {
+                        Iterator<TerminalNode> it =  terminalNodeStack.descendingIterator();
+                        boolean canRemove = false;
+                        while (it.hasNext()) {
+                            TerminalNode node = it.next();
+                            if (node.getSymbol().getType() == endType) {
+                                canRemove = true;
+                            } else if (node.getSymbol().getType() == startType) {
+                                return;
+                            } else if (canRemove) {
+                                it.remove();
+                            }
+                        }
                     }
 
-                    @Override
-                    public void exitSelect_stmt(@NotNull SQLiteParser.Select_stmtContext ctx) {
-                        super.exitSelect_stmt(ctx);
-                    }
-
-                    @Override
-                    public void enterSelect_or_values(@NotNull SQLiteParser.Select_or_valuesContext ctx) {
-                        super.enterSelect_or_values(ctx);
-                    }
-
-                    @Override
-                    public void exitSelect_core(@NotNull SQLiteParser.Select_coreContext ctx) {
-                        super.exitSelect_core(ctx);
+                    private boolean isEnclose(SQLiteParser.ExprContext ctx) {
+                        return ctx.expr() != null && !ctx.expr().isEmpty()
+                                && ctx.start != null && ctx.start.getType() == SQLiteParser.OPEN_PAR
+                                && ctx.stop != null && ctx.stop.getType() == SQLiteParser.CLOSE_PAR;
                     }
                 }, tree);
             }
@@ -274,5 +251,6 @@ public class QueryParse {
                 e.printStackTrace();
                 return;
             }
+
     }
 }

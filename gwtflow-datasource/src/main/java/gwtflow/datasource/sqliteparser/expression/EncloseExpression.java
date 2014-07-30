@@ -1,13 +1,19 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-public class EncloseExpression extends BaseExpression<Object> {
+import gwtflow.datasource.Schema;
+
+import java.util.List;
+import java.util.Map;
+
+public class EncloseExpression extends BaseExpression {
     private BaseExpression expression;
 
     public EncloseExpression(BaseExpression expression) {
         this.expression = expression;
     }
 
-    public Object getResult() {
-        return expression == null ? null : expression.getResult();
+    @Override
+    public Object getResult(Schema tabs) {
+        return expression == null ? null : expression.getResult(tabs);
     }
 }

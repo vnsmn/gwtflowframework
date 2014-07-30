@@ -1,5 +1,6 @@
 package gwtflow.datasource.sqliteparser;
 
+import gwtflow.datasource.QueryParse;
 import gwtflow.datasource.sqliteparser.expression.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -19,6 +20,9 @@ public class ParserTest {
 
     @Test
     public void test() {
+
+        QueryParse queryParse = new QueryParse();
+        queryParse.parse();
 
             try {
                 //String sql = "select sel1.col1 as col2 from tab1 join tab2 on t1.c1 = t2.c2 where t11.c11 = 9 and t11.c22 = :test";
@@ -126,17 +130,17 @@ public class ParserTest {
                                 BaseExpression right = whereExpressionStack.pollLast();
                                 BaseExpression left = whereExpressionStack.pollLast();
                                 whereExpressionStack.offerLast(new EQExpression(left, right));
-                                System.out.println(((EQExpression) whereExpressionStack.peekLast()).getResult());
+                                //System.out.println(((EQExpression) whereExpressionStack.peekLast()).getResult());
                             } else if (ctx.K_AND() != null) {
                                 BaseExpression right = whereExpressionStack.pollLast();
                                 BaseExpression left = whereExpressionStack.pollLast();
                                 whereExpressionStack.offerLast(new ANDExpression(left, right));
-                                System.out.println(((ANDExpression) whereExpressionStack.peekLast()).getResult());
+                                //System.out.println(((ANDExpression) whereExpressionStack.peekLast()).getResult());
                             } else if (ctx.K_OR() != null) {
                                 BaseExpression right = whereExpressionStack.pollLast();
                                 BaseExpression left = whereExpressionStack.pollLast();
                                 whereExpressionStack.offerLast(new ORExpression(left, right));
-                                System.out.println(((ORExpression) whereExpressionStack.peekLast()).getResult());
+                                //System.out.println(((ORExpression) whereExpressionStack.peekLast()).getResult());
                             } else if (ctx.column_name() != null && !ctx.column_name().isEmpty()) {
                                 IdentifierExpression expression = new IdentifierExpression(ctx.column_name().getText());
                                 if (ctx.table_name() != null && !ctx.table_name().isEmpty()) {
