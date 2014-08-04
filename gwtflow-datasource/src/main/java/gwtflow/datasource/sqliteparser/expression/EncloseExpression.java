@@ -1,9 +1,6 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-import gwtflow.datasource.Schema;
-
-import java.util.List;
-import java.util.Map;
+import gwtflow.datasource.Model;
 
 public class EncloseExpression extends BaseExpression {
     private BaseExpression expression;
@@ -13,7 +10,7 @@ public class EncloseExpression extends BaseExpression {
     }
 
     @Override
-    public Object getResult(Schema tabs) {
+    public Object getResult(Model tabs) {
         return expression == null ? null : expression.getResult(tabs);
     }
 }

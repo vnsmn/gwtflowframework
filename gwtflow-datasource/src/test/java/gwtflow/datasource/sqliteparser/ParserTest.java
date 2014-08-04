@@ -1,6 +1,6 @@
 package gwtflow.datasource.sqliteparser;
 
-import gwtflow.datasource.QueryParse;
+import gwtflow.datasource.QueryHandler;
 import gwtflow.datasource.sqliteparser.expression.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -20,10 +20,6 @@ public class ParserTest {
 
     @Test
     public void test() {
-
-        QueryParse queryParse = new QueryParse();
-        queryParse.parse();
-
             try {
                 //String sql = "select sel1.col1 as col2 from tab1 join tab2 on t1.c1 = t2.c2 where t11.c11 = 9 and t11.c22 = :test";
                 //String sql = "select sel1 from tab1 where t11.c11 == 9";

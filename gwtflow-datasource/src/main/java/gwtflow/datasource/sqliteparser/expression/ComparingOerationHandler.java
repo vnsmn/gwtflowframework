@@ -1,17 +1,16 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-import gwtflow.datasource.Schema;
-import gwtflow.datasource.Table;
+import gwtflow.datasource.Model;
 
 import java.math.BigDecimal;
 import java.util.*;
 
-public class ExpressionHandler {
+public class ComparingOerationHandler {
     public enum OPER_TYPE {
         LESS, MORE, EQUAL, LESS_EQUAL, MORE_EQUAL
     }
 
-    public Object getResult(Schema tabs,
+    public Object getResult(Model tabs,
                             BaseExpression left, BaseExpression right,
                             OPER_TYPE operType) {
         IdentifierExpression idExp1 = null;
@@ -36,7 +35,7 @@ public class ExpressionHandler {
         }
 
         if (idExp1 != null && idExp2 != null) {
-            return getResultImpl(tabs, idExp1, idExp2, operType);
+            return null;// getResultImpl(tabs, idExp1, idExp2, operType);
         } else if (idExp1 != null && ltExp2 != null) {
             return getResultImpl(tabs, idExp1, ltExp2, operType);
         } else if (idExp2 != null && ltExp1 != null) {
@@ -48,39 +47,38 @@ public class ExpressionHandler {
         }
     }
 
-    private Object getResultImpl(Schema tabs,
-                            IdentifierExpression left, IdentifierExpression right,
-                            OPER_TYPE operType) {
-
-        Schema  calcTabs = new Schema();
-        calcTabs.addTable(left.getTableName());
-        calcTabs.addTable(right.getTableName());
-
-        tabs.get(left.getTableName());
-        for (Table.Row rows1 : tabs.get(left.getTableName()).getRows()) {
-            Object val1 = rows1.getValue(left.getColumnName());
-            for (Table.Row rows2 : tabs.get(right.getTableName()).getRows()) {
-                Object val2 = rows2.getValue(right.getColumnName());
-                if (operation(val1, val2, operType)) {
-                    calcTabs.get(left.getTableName()).addRow(rows1);
-                    calcTabs.get(right.getTableName()).addRow(rows2);
+    private Object getResultImpl(Model left, Model right, OPER_TYPE operType) {
+        Model modifiedModel = new Model();
+        for (Set<Model.Row> rows1 : left.getResult()) {
+            for (Set<Model.Row> rows2 : right.getResult()) {
+                if (resultContains(rows1, rows2)) {
+                    List l = new ArrayList(rows1);
+                    l.addAll(rows2);
+                    modifiedModel.addResultRows(l);
                 }
             }
         }
-
-        return calcTabs;
+        return modifiedModel;
     }
 
-    private Object getResultImpl(Schema tabs,
+    private boolean resultContains(Set<Model.Row> rows1, Set<Model.Row> rows2) {
+        for (Model.Row row : rows1)
+            if (rows2.contains(row)) {
+                return true;
+            }
+        return false;
+    }
+
+    private Object getResultImpl(Model tabs,
                             IdentifierExpression left, LiteralExpression right,
                             OPER_TYPE operType) {
 
-        Schema  calcTabs = new Schema();
+        Model calcTabs = new Model();
         calcTabs.addTable(left.getTableName());
 
         Object val2 = right.getLiteral();
         tabs.get(left.getTableName());
-        for (Table.Row rows1 : tabs.get(left.getTableName()).getRows()) {
+        for (Model.Row rows1 : tabs.get(left.getTableName()).getRows()) {
             Object val1 = rows1.getValue(left.getColumnName());
                 if (operation(val1, val2, operType)) {
                     calcTabs.get(left.getTableName()).addRow(rows1);

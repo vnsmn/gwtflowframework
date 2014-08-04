@@ -1,9 +1,6 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-import gwtflow.datasource.Schema;
-
-import java.util.List;
-import java.util.Map;
+import gwtflow.datasource.Model;
 
 public class OrderExpression extends IdentifierExpression {
     public enum DIRECT {ASC, DESC};
@@ -26,7 +23,7 @@ public class OrderExpression extends IdentifierExpression {
     }
 
     @Override
-    public Object getResult(Schema tabs) {
+    public Object getResult(Model tabs) {
         return null;
     }
 }

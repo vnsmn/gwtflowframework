@@ -1,12 +1,9 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-import gwtflow.datasource.Schema;
-
-import java.util.List;
-import java.util.Map;
+import gwtflow.datasource.Model;
 
 abstract public class BaseExpression {
-    public Object getResult(Schema tabs) {
+    public Object getResult(Model tabs) {
         return null;
     }
 }

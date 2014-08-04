@@ -1,13 +1,11 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-import gwtflow.datasource.Schema;
-
-import java.util.*;
+import gwtflow.datasource.Model;
 
 public class EQExpression extends BaseExpression {
     private BaseExpression left;
     private BaseExpression right;
-    private ExpressionHandler handler = new ExpressionHandler();
+    private LogicalOperationHandler handler = new LogicalOperationHandler();
 
     public EQExpression(BaseExpression left, BaseExpression right) {
         this.left = left;
@@ -22,7 +20,7 @@ public class EQExpression extends BaseExpression {
         return right;
     }
 
-    public Object getResult(Schema tabs) {
-        return handler.getResult(tabs, getLeft(), getRight(), ExpressionHandler.OPER_TYPE.EQUAL);
+    public Object getResult(Model tabs) {
+        return handler.getResult(tabs, getLeft(), getRight(), LogicalOperationHandler.OPER_TYPE.EQUAL);
     }
 }

@@ -1,10 +1,6 @@
 package gwtflow.datasource.sqliteparser.expression;
 
-import gwtflow.datasource.Schema;
-
-import javax.naming.OperationNotSupportedException;
-import java.util.List;
-import java.util.Map;
+import gwtflow.datasource.Model;
 
 public class IdentifierExpression extends BaseExpression {
     private String columnName;
@@ -32,7 +28,7 @@ public class IdentifierExpression extends BaseExpression {
     }
 
     @Override
-    public Object getResult(Schema tabs) {
+    public Object getResult(Model tabs) {
         return null;
     }
 }
